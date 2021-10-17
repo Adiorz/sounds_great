@@ -29,7 +29,7 @@ for file in glob('sounds/*'):
     try:
         attrs = dict(EasyID3(file))
         attrs['length'] = MP3(file).info.length
-        attrs['url'] = SOUNDS[mp3]
+        # attrs['url'] = SOUNDS[mp3]
         attrs['url'] = file
         sounds.append(attrs)
     except():

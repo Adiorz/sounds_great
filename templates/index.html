@@ -1,0 +1,57 @@
+<!--<html>-->
+<!--<head>-->
+<!--  <script>-->
+<!--    var empty_sound = '{{sounds[2]}}';-->
+<!--    function playSound(sound) {-->
+<!--        let track = document.createElement('audio');-->
+<!--        track.src = sound.url;-->
+<!--        track.load();-->
+<!--        track.play();-->
+<!--        track.onended((event) => {-->
+<!--          console.log('Video stopped either because 1) it was over, ' +-->
+<!--              'or 2) no further data is available.');-->
+<!--        })-->
+<!--    }-->
+<!--  </script>-->
+<!--</head>-->
+<!--<body>-->
+<!--Hello world-->
+<!--  <button onclick="playSound({{sounds[1]}})" />-->
+<!--</body>-->
+<!--</html>-->
+
+<html>
+<head>
+  <script>
+    var someJavaScriptVar = '{{ sounds[1].title }}';
+    function playSound(sound) {
+      let track = document.createElement('audio');
+      track.src = sound.url;
+      track.load();
+      track.play();
+        track.addEventListener('ended', (event) => {
+        console.log('Video stopped either because 1) it was over, ' +
+            'or 2) no further data is available.');
+        return track;
+      });
+    }
+    function randomIntFromInterval(min, max) { // min and max included
+      return Math.floor(Math.random() * (max - min + 1) + min)
+    }
+    function getRandomSound(sounds) {
+      let index = randomIntFromInterval(1, 12);
+      console.log(index);
+      return sounds[index];
+    }
+    function playSounds(sounds) {
+      console.log(sounds)
+      let sound = getRandomSound();
+      playSound(sound);
+    };
+  </script>
+</head>
+<body>
+  <p>Hello World</p>
+  <button onclick="playSound({{sounds[2]}})" />
+</body>
+</html>

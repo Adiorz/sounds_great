@@ -1,57 +1,39 @@
-<!--<html>-->
-<!--<head>-->
-<!--  <script>-->
-<!--    var empty_sound = '{{sounds[2]}}';-->
-<!--    function playSound(sound) {-->
-<!--        let track = document.createElement('audio');-->
-<!--        track.src = sound.url;-->
-<!--        track.load();-->
-<!--        track.play();-->
-<!--        track.onended((event) => {-->
-<!--          console.log('Video stopped either because 1) it was over, ' +-->
-<!--              'or 2) no further data is available.');-->
-<!--        })-->
-<!--    }-->
-<!--  </script>-->
-<!--</head>-->
-<!--<body>-->
-<!--Hello world-->
-<!--  <button onclick="playSound({{sounds[1]}})" />-->
-<!--</body>-->
-<!--</html>-->
-
 <html>
 <head>
+  <!-- Load FontAwesome icons -->
+  <link rel="stylesheet"
+        href=
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
+  <!-- Load the custom CSS style file -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
   <script>
-    var someJavaScriptVar = '{{ sounds[1].title }}';
-    function playSound(sound) {
-      let track = document.createElement('audio');
+    var track = document.createElement('audio');
+    var my_sounds = {{ sounds|tojson }};
+    var sound = getRandomSound();
+    function playSound() {
+      console.log("Going to play: " + sound.title);
       track.src = sound.url;
       track.load();
       track.play();
-        track.addEventListener('ended', (event) => {
-        console.log('Video stopped either because 1) it was over, ' +
-            'or 2) no further data is available.');
-        return track;
-      });
     }
+    track.addEventListener('ended', (event) => {
+      console.log('Wait 2s.');
+      sound = getRandomSound();
+      setTimeout(playSound, 2000);
+    });
     function randomIntFromInterval(min, max) { // min and max included
       return Math.floor(Math.random() * (max - min + 1) + min)
     }
-    function getRandomSound(sounds) {
-      let index = randomIntFromInterval(1, 12);
+    function getRandomSound() {
+      var index = randomIntFromInterval(1, 12);
+      var sound = my_sounds[index];
       console.log(index);
-      return sounds[index];
+      return sound;
     }
-    function playSounds(sounds) {
-      console.log(sounds)
-      let sound = getRandomSound();
-      playSound(sound);
-    };
   </script>
 </head>
 <body>
-  <p>Hello World</p>
-  <button onclick="playSound({{sounds[2]}})" />
+  <button style="font-size:150px;" onclick="playSound()">&#9658;</button>
 </body>
 </html>

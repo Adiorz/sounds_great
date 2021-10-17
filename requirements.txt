@@ -1,3 +1,4 @@
 flask
 mutagen
 loguru
+gunicorn

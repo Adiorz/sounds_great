@@ -30,7 +30,7 @@ for file in glob('sounds/*'):
         attrs = dict(EasyID3(file))
         attrs['length'] = MP3(file).info.length
         attrs['url'] = SOUNDS[mp3]
-        attrs['url'] = file
+        # attrs['url'] = file
         sounds.append(attrs)
     except():
         pass
@@ -49,7 +49,7 @@ def index():
 
 
 @app.route('/', methods=['GET'])
-def metrics():  # pragma: no cover
+def play():  # pragma: no cover
     return render_template("index.html", sounds=sounds)
 
 

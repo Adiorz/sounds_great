@@ -8,32 +8,51 @@
   <!-- Load the custom CSS style file -->
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
   <script>
-    var track = document.createElement('audio');
-    var my_sounds = {{ sounds|tojson }};
-    var sound = getRandomSound();
+    let track = document.createElement('audio');
+    let mySounds = {{ sounds|tojson }};
+    let idx = 0;
+
+    shuffle(mySounds)
+    let sound = mySounds[idx];
+
     function playSound() {
       console.log("Going to play: " + sound.title);
       track.src = sound.url;
       track.load();
       track.play();
     }
+
     track.addEventListener('ended', (event) => {
       console.log('Wait 2s.');
-      sound = getRandomSound();
+      idx += 1;
+      if (idx == mySounds.length) {
+        idx = 0;
+        shuffle(mySounds)
+      }
+      sound = mySounds[idx];
       setTimeout(playSound, 2000);
     });
-    function randomIntFromInterval(min, max) { // min and max included
-      return Math.floor(Math.random() * (max - min + 1) + min)
-    }
-    function getRandomSound() {
-      var index = randomIntFromInterval(1, 12);
-      var sound = my_sounds[index];
-      console.log(index);
-      return sound;
+
+    function shuffle(array) {
+      let currentIndex = array.length,  randomIndex;
+
+      // While there remain elements to shuffle...
+      while (currentIndex != 0) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex], array[currentIndex]];
+      }
+
+      return array;
     }
   </script>
 </head>
 <body>
-  <button style="font-size:150px;" onclick="playSound()">&#9658;</button>
+  <button style="font-size:150px;" onclick="var e=this;setTimeout(function(){e.disabled=true;},0);playSound()">&#9658;</button>
 </body>
 </html>

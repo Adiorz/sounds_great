@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, jsonify, send_from_directory, render_template
 from glob import glob
 from mutagen.easyid3 import EasyID3
@@ -20,6 +22,10 @@ for file in glob('sounds/*'):
 app = Flask(__name__)
 
 
+def get_sorted_sounds():
+    return sorted(sounds, key=lambda s: int(s['url'].split("sounds\\")[1].split('.')[0]))
+
+
 @app.route('/sounds/<path:path>')
 def send_file(path):
     return send_from_directory('sounds', path)
@@ -27,13 +33,13 @@ def send_file(path):
 
 @app.route('/index')
 def index():
-    return jsonify(sounds)
+    return jsonify(get_sorted_sounds())
 
 
 @app.route('/', methods=['GET'])
 def play():  # pragma: no cover
-    return render_template("index.html", sounds=sounds)
+    return render_template("index.html", sounds=get_sorted_sounds())
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

@@ -1,4 +1,5 @@
 import os
+import random
 
 from flask import Flask, jsonify, send_from_directory, render_template
 from glob import glob
@@ -6,7 +7,6 @@ from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
 
 from loguru import logger as log
-
 
 sounds = []
 for file in glob('sounds/*'):
@@ -18,6 +18,9 @@ for file in glob('sounds/*'):
         sounds.append(attrs)
     except():
         pass
+
+categories = ['marki samochodów', 'państwa', 'bogowie', 'rzeki', 'dania', 'bajki', 'aktorzy', 'meble', 'kolor', 'owoce',
+              'warzywa', 'zawód', 'kwiat', 'część ciała', 'język', 'część garderoby', 'piosenka', 'gra planszowa']
 
 app = Flask(__name__)
 
@@ -38,7 +41,7 @@ def index():
 
 @app.route('/', methods=['GET'])
 def play():  # pragma: no cover
-    return render_template("index.html", sounds=sounds)
+    return render_template("index.html", sounds=sounds, category=random.choice(categories))
 
 
 if __name__ == "__main__":

@@ -33,12 +33,12 @@ def send_file(path):
 
 @app.route('/index')
 def index():
-    return jsonify(get_sorted_sounds())
+    return jsonify(sounds)
 
 
 @app.route('/', methods=['GET'])
 def play():  # pragma: no cover
-    return render_template("index.html", sounds=get_sorted_sounds())
+    return render_template("index.html", sounds=sounds)
 
 
 if __name__ == "__main__":

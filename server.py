@@ -19,8 +19,29 @@ for file in glob('sounds/*'):
     except():
         pass
 
-categories = ['marki samochodów', 'państwa', 'bogowie', 'rzeki', 'dania', 'bajki', 'aktorzy', 'meble', 'kolor', 'owoce',
-              'warzywa', 'zawód', 'kwiat', 'część ciała', 'język', 'część garderoby', 'piosenka', 'gra planszowa']
+CATEGORIES = """Mityczne stworzenia
+Rośliny
+Części ciała
+Kolory
+Gry planszowe
+Bogowie
+Aktorzy
+Marki samochodów
+Rzeki
+Zawody
+Państwa
+Potrawy
+Meble
+Zjawiska pogodowe
+Liczby
+Dania
+Bajki
+Owoce
+Warzywa
+Kwiaty
+Języki
+Części garderoby"""
+
 
 app = Flask(__name__)
 
@@ -41,7 +62,7 @@ def index():
 
 @app.route('/', methods=['GET'])
 def play():  # pragma: no cover
-    return render_template("index.html", sounds=sounds, category=random.choice(categories))
+    return render_template("index.html", sounds=sounds, category=random.choice(CATEGORIES.lower().split('\n')))
 
 
 if __name__ == "__main__":

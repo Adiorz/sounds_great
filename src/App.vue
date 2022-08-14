@@ -1,46 +1,35 @@
 <template>
   <div id="app">
-    <header>
-      <h1>Sounds Great</h1>
-    </header>
-    <main>
-      <section class="options">
+    <div class="player">
         <div class="options">
           <input type="checkbox" id="animal" name="animal" checked>
-          <label for="animal">🐷<!-- animal --></label><!-- <br>  -->
+          <label for="animal">🐷<!-- animal --></label>
+          <br>
           <input type="checkbox" id="attribute" name="attribute">
-          <label for="attribute">👕<!-- attribute --></label><!-- <br>  -->
+          <label for="attribute">👕<!-- attribute --></label>
+          <br>
           <input type="checkbox" id="color" name="color">
           <label for="color">🌈<!-- color --></label><!-- <br>  -->
         </div>
-      </section>
-      <br>
-      <section class="player">
-        <h2 class="song-title">{{ current.title }}</h2>
         <div class="control">
-          <button class="play" v-if="!isPlaying" @click="play"> ▶️ </button>
-          <button class="pause" v-else @click="pause"> ⏸ </button>
-          <button class="intro" @click="intro"> ♻ </button>
+          <button class="play" v-if="!isPlaying" @click="play" style="font-size: 50px"> ▶️ </button>
+          <button class="pause" v-else @click="pause" style="font-size: 50px"> ⏸ </button>
+          <button class="intro" @click="intro" style="font-size: 50px"> ♻ </button>
         </div>
-      </section>
+    </div>
+    <div class="playlist">
+      <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)" :class="(song.sound == current.sound) ? 'song playing' : 'song'">
+        {{ song.image }}
+      </button>
       <br>
-      <section class="playlist">
-        <!-- <h3>Animals</h3> -->
-        <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)" :class="(song.sound == current.sound) ? 'song playing' : 'song'">
-          {{ song.image }}
-        </button>
-        <br>
-        <!-- <h3>Attributes</h3> -->
-        <button v-for="song in attributeAssets" :key="song.sound" @click="playSong(song)" :class="(song.sound == current.sound) ? 'song playing' : 'song'">
-          {{ song.image }}
-        </button>
-        <br>
-        <!-- <h3>Colors</h3> -->
-        <button v-for="song in colorAssets" :key="song.sound" @click="playSong(song)" :class="(song.sound == current.sound) ? 'song playing' : 'song'">
-          {{ song.image }}
-        </button>
-      </section>
-    </main>
+      <button v-for="song in attributeAssets" :key="song.sound" @click="playSong(song)" :class="(song.sound == current.sound) ? 'song playing' : 'song'">
+        {{ song.image }}
+      </button>
+      <br>
+      <button v-for="song in colorAssets" :key="song.sound" @click="playSong(song)" :class="(song.sound == current.sound) ? 'song playing' : 'song'">
+        {{ song.image }}
+      </button>
+    </div>
   </div>
 </template>
 
@@ -130,11 +119,11 @@ export default {
       return array[Math.floor(Math.random() * array.length)];
     },
     playSong (song) {
-      this.current = this.toBePlayed.shift();
-      this.player.src = this.current.sound;
-
       if (song != undefined && song.sound != undefined) {
         this.current = song;
+        this.player.src = this.current.sound;
+      } else {
+        this.current = this.toBePlayed.shift();
         this.player.src = this.current.sound;
       }
       console.log(this.current.title);
@@ -173,7 +162,7 @@ export default {
         setTimeout(function(){ this.playSong() }.bind(this), 10);  // 2000
       }
     }.bind(this));
-  }
+  },
 }
 </script>
 
@@ -186,17 +175,9 @@ export default {
 body {
   font-family: sans-serif;
 }
-header {
-  display: flex;
-  justify-content: center;
+.player { 
+  display: flex; 
   align-items: center;
-  padding: 15px;
-  background-color: #212121;
-  color: #FFF;
 }
-main {
-  width: 100%;
-  max-width: 768px;
-  margin: 0 auto;
-}
+
 </style>

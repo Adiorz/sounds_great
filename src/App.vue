@@ -4,17 +4,17 @@
       <div class="options">
         <div class="option">
           <input type="checkbox" id="animal" name="animal" checked>
-          <label for="animal" class="icon">🐷</label>
+          <label for="animal" class="icon"><img src="./assets/options/animal.png" /></label>
         </div>
         <br>
         <div class="option">
           <input type="checkbox" id="attribute" name="attribute">
-          <label for="attribute" class="icon">👕</label>
+          <label for="attribute" class="icon"><img src="./assets/options/attribute.png" /></label>
         </div>
         <br>
         <div class="option">
           <input type="checkbox" id="color" name="color">
-          <label for="color" class="icon">🌈</label>
+          <label for="color" class="icon"><img src="./assets/options/color.png" /></label>
         </div>
       </div>
       <div class="control">
@@ -26,16 +26,16 @@
       </div>
     </div>
     <div class="playlist">
-      <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)" :class="icon">
-        <label class="icon">{{ song.image }}</label>
+      <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)" class="icon">
+        <img :src="song.image" />
       </button>
       <br>
-      <button v-for="song in attributeAssets" :key="song.sound" @click="playSong(song)">
-        <label class="icon">{{ song.image }}</label>
+      <button v-for="song in attributeAssets" :key="song.sound" @click="playSong(song)" class="icon">
+        <img :src="song.image" />
       </button>
       <br>
-      <button v-for="song in colorAssets" :key="song.sound" @click="playSong(song)" :class="icon">
-        <label class="icon">{{ song.image }}</label>
+      <button v-for="song in colorAssets" :key="song.sound" @click="playSong(song)" class="icon">
+        <img :src="song.image" />
       </button>
     </div>
   </div>
@@ -57,72 +57,75 @@ export default {
         {
           title: 'cat',
           sound: require('./assets/animals/cat.mp3'),
-          image: '🐈',
+          image: require('./assets/animals/cat.png'),
         },
         {
           title: 'cow',
           sound: require('./assets/animals/cow.mp3'),
-          image: '🐄',
+          image: require('./assets/animals/cow.png'),
         },
         {
           title: 'elephant',
           sound: require('./assets/animals/elephant.mp3'),
-          image: '🐘',
+          image: require('./assets/animals/elephant.png'),
         },
         {
           title: 'snake',
           sound: require('./assets/animals/snake.mp3'),
-          image: '🐍',
+          image: require('./assets/animals/snake.png'),
         },
       ],
       attributeAssets: [
         {
           title: 'boots',
           sound: require('./assets/attributes/boots.mp3'),
-          image: '👟',
+          image: require('./assets/attributes/boots.png'),
         },
         {
           title: 'glasses',
           sound: require('./assets/attributes/glasses.mp3'),
-          image: '👓',
+          image: require('./assets/attributes/glasses.png'),
         },
         {
           title: 'hat',
           sound: require('./assets/attributes/hat.mp3'),
-          image: '👒',
+          image: require('./assets/attributes/hat.png'),
         },
         {
           title: 'umbrella',
           sound: require('./assets/attributes/umbrella.mp3'),
-          image: '☔',
+          image: require('./assets/attributes/umbrella.png'),
         },
       ],
       colorAssets: [
         {
           title: 'blue',
           sound: require('./assets/colors/blue.mp3'),
-          image: '🟦',
+          image: require('./assets/colors/blue.png'),
         },
         {
           title: 'green',
           sound: require('./assets/colors/green.mp3'),
-          image: '🟩',
+          image: require('./assets/colors/green.png'),
         },
         {
           title: 'red',
           sound: require('./assets/colors/red.mp3'),
-          image: '🟥',
+          image: require('./assets/colors/red.png'),
         },
         {
           title: 'yellow',
           sound: require('./assets/colors/yellow.mp3'),
-          image: '🟨',
+          image: require('./assets/colors/yellow.png'),
         },
       ],
       player: new Audio()
     }
   },
   methods: {
+    getImagePath(type, name) {
+      return './assets/' + type + '/' + name + '.png'
+    },
     getRandom(array) {
       return array[Math.floor(Math.random() * array.length)];
     },
@@ -193,12 +196,26 @@ body {
 }
 
 .icon {
-  font-size: 50px;
+  width: 54px;
+  height: 54px;
+  padding: 1px;
+  margin: 5px 12px;
+  border-width: 1px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  background: transparent;
+  border-radius: 5%;
+  border-top-left-radius: 5%;
+  border-top-right-radius: 5%;
+  border-bottom-right-radius: 5%;
+  border-bottom-left-radius: 5%;
 }
 
 input {
   width: 30px;
-  margin: 5px;
+  margin: 10px 10px 20px 0px;
 }
 
 .option {
@@ -241,12 +258,8 @@ input {
   border-radius: 5%;
 }
 
-.options,
-.control {
-  padding: 0.1%;
-}
-
-.playlist {
-  padding: 0.1%;
+.options {
+  padding: 10px;
+  margin-top: 30px;
 }
 </style>

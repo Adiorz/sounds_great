@@ -1,33 +1,41 @@
 <template>
   <div id="app">
     <div class="player">
-        <div class="options">
+      <div class="options">
+        <div class="option">
           <input type="checkbox" id="animal" name="animal" checked>
-          <label for="animal">🐷<!-- animal --></label>
-          <br>
+          <label for="animal" class="icon">🐷</label>
+        </div>
+        <br>
+        <div class="option">
           <input type="checkbox" id="attribute" name="attribute">
-          <label for="attribute">👕<!-- attribute --></label>
-          <br>
+          <label for="attribute" class="icon">👕</label>
+        </div>
+        <br>
+        <div class="option">
           <input type="checkbox" id="color" name="color">
-          <label for="color">🌈<!-- color --></label><!-- <br>  -->
+          <label for="color" class="icon">🌈</label>
         </div>
-        <div class="control">
-          <button class="play" v-if="!isPlaying" @click="play" style="font-size: 50px"> ▶️ </button>
-          <button class="pause" v-else @click="pause" style="font-size: 50px"> ⏸ </button>
-          <button class="intro" @click="intro" style="font-size: 50px"> ♻ </button>
-        </div>
+      </div>
+      <div class="control">
+        <button class="play" v-if="!isPlaying" @click="play"> <img src="./assets/icons/play.svg" class="play_img" />
+        </button>
+        <button class="pause" v-else @click="pause"> <img src="./assets/icons/pause.svg" class="pause_img" />
+        </button><br>
+        <button class="intro" @click="intro"> <img src="./assets/icons/intro.svg" class="intro_img" /> </button>
+      </div>
     </div>
     <div class="playlist">
-      <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)" :class="(song.sound == current.sound) ? 'song playing' : 'song'">
-        {{ song.image }}
+      <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)" :class="icon">
+        <label class="icon">{{ song.image }}</label>
       </button>
       <br>
-      <button v-for="song in attributeAssets" :key="song.sound" @click="playSong(song)" :class="(song.sound == current.sound) ? 'song playing' : 'song'">
-        {{ song.image }}
+      <button v-for="song in attributeAssets" :key="song.sound" @click="playSong(song)">
+        <label class="icon">{{ song.image }}</label>
       </button>
       <br>
-      <button v-for="song in colorAssets" :key="song.sound" @click="playSong(song)" :class="(song.sound == current.sound) ? 'song playing' : 'song'">
-        {{ song.image }}
+      <button v-for="song in colorAssets" :key="song.sound" @click="playSong(song)" :class="icon">
+        <label class="icon">{{ song.image }}</label>
       </button>
     </div>
   </div>
@@ -37,7 +45,7 @@
 
 export default {
   name: 'app',
-  data () {
+  data() {
     return {
       current: {},
       toBePlayed: [],
@@ -115,10 +123,10 @@ export default {
     }
   },
   methods: {
-    getRandom (array) {
+    getRandom(array) {
       return array[Math.floor(Math.random() * array.length)];
     },
-    playSong (song) {
+    playSong(song) {
       if (song != undefined && song.sound != undefined) {
         this.current = song;
         this.player.src = this.current.sound;
@@ -130,7 +138,7 @@ export default {
       this.player.play();
       this.isPlaying = true;
     },
-    play () {
+    play() {
       if (this.toBePlayed.length === 0) {
         if (document.querySelector('#animal').checked) {
           this.toBePlayed.push(this.getRandom(this.animalAssets));
@@ -144,22 +152,22 @@ export default {
       }
       this.playSong();
     },
-    pause () {
+    pause() {
       this.player.pause();
       this.isPlaying = false;
     },
-    intro () {
+    intro() {
       this.toBePlayed = [...this.animalAssets, ...this.attributeAssets, ...this.colorAssets];
       this.playSong();
     }
   },
   created() {
-    
+
     this.player.addEventListener('ended', function () {
       this.isPlaying = false;
       console.log(this.toBePlayed.length);
       if (this.toBePlayed.length > 0) {
-        setTimeout(function(){ this.playSong() }.bind(this), 10);  // 2000
+        setTimeout(function () { this.playSong() }.bind(this), 10);  // 2000
       }
     }.bind(this));
   },
@@ -172,12 +180,73 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-body {
-  font-family: sans-serif;
-}
-.player { 
-  display: flex; 
+
+#app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   align-items: center;
 }
 
+body {
+  font-family: sans-serif;
+}
+
+.icon {
+  font-size: 50px;
+}
+
+input {
+  width: 30px;
+  margin: 5px;
+}
+
+.option {
+  display: flex;
+  flex-direction: row;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+}
+
+.play,
+.pause {
+  font-size: 120px;
+  border: 0;
+  background: transparent;
+}
+
+.play_img {
+  margin: 25px 0 0 0;
+  width: 160px;
+  background: #16c60c;
+  border-radius: 5%;
+}
+
+.pause_img {
+  margin: 25px 0 0 0;
+  width: 160px;
+  background: #e81224;
+  border-radius: 5%;
+}
+
+.intro {
+  margin: -50px 0 10px 0;
+  width: 160px;
+  height: 40px;
+  border: 0;
+  background: #0078d7;
+  border-radius: 5%;
+}
+
+.options,
+.control {
+  padding: 0.1%;
+}
+
+.playlist {
+  padding: 0.1%;
+}
 </style>

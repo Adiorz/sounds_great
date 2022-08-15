@@ -26,7 +26,7 @@
                 d="m43.17908,40.60063l0,78.79874c0,6.00878 7.01719,9.65969 12.42123,6.38909l65.65506,-39.39937c5.00075,-2.96636 5.00075,-9.81181 0,-12.85423l-65.65506,-39.32331c-5.40404,-3.2706 -12.42123,0.3803 -12.42123,6.38909z" />
               <text transform="matrix(7.90178 0 0 5.50952 -620.323 -624.598)" stroke="#000" xml:space="preserve"
                 text-anchor="start" font-family="'Caveat'" font-size="5" id="svg_2" y="140.07375" x="90.14896"
-                stroke-width="0" fill="#000000">play</text>
+                stroke-width="0" fill="white">play</text>
             </g>
           </svg>
         </button>
@@ -38,7 +38,7 @@
                 id="svg_1" />
               <text transform="matrix(7.90178 0 0 5.50952 -620.323 -624.598)" stroke="#000" xml:space="preserve"
                 text-anchor="start" font-family="'Caveat'" font-size="5" id="svg_2" y="140.07375" x="88.14896"
-                stroke-width="0" fill="#000000">pause</text>
+                stroke-width="0" fill="white">pause</text>
             </g>
           </svg>
         </button><br>
@@ -273,6 +273,7 @@ export default {
   font-family: 'Caveat';
   font-size: 24px;
   line-height: 15px;
+  color: white;
 }
 
 * {

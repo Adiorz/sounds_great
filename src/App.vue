@@ -18,15 +18,39 @@
         </div>
       </div>
       <div class="control">
-        <button class="play" v-if="!isPlaying" @click="play"> <img :src="iconAssets.play" class="play_img" />
+        <button class="play" v-if="!isPlaying" @click="play">
+          <svg class="play_img" width="160" height="160" xmlns="http://www.w3.org/2000/svg" fill="white">
+            <g>
+              <title>Layer 1</title>
+              <path stroke="null" id="svg_1"
+                d="m43.17908,40.60063l0,78.79874c0,6.00878 7.01719,9.65969 12.42123,6.38909l65.65506,-39.39937c5.00075,-2.96636 5.00075,-9.81181 0,-12.85423l-65.65506,-39.32331c-5.40404,-3.2706 -12.42123,0.3803 -12.42123,6.38909z" />
+              <text transform="matrix(7.90178 0 0 5.50952 -620.323 -624.598)" stroke="#000" xml:space="preserve"
+                text-anchor="start" font-family="'Caveat'" font-size="5" id="svg_2" y="140.07375" x="90.14896"
+                stroke-width="0" fill="#000000">play</text>
+            </g>
+          </svg>
         </button>
-        <button class="pause" v-else @click="pause"> <img :src="iconAssets.pause" class="pause_img" />
+        <button class="pause" v-else @click="pause">
+          <svg class="pause_img" width="160" height="160" xmlns="http://www.w3.org/2000/svg" fill="white">
+            <g>
+              <path stroke="null"
+                d="m50.11833,124.30675c8.21746,0 14.94083,-5.69658 14.94083,-12.65907l0,-63.29535c0,-6.96249 -6.72338,-12.65907 -14.94083,-12.65907s-14.94083,5.69658 -14.94083,12.65907l0,63.29535c0,6.96249 6.72338,12.65907 14.94083,12.65907zm44.82251,-75.95443l0,63.29535c0,6.96249 6.72338,12.65907 14.94083,12.65907s14.94083,-5.69658 14.94083,-12.65907l0,-63.29535c0,-6.96249 -6.72338,-12.65907 -14.94083,-12.65907s-14.94083,5.69658 -14.94083,12.65907z"
+                id="svg_1" />
+              <text transform="matrix(7.90178 0 0 5.50952 -620.323 -624.598)" stroke="#000" xml:space="preserve"
+                text-anchor="start" font-family="'Caveat'" font-size="5" id="svg_2" y="140.07375" x="88.14896"
+                stroke-width="0" fill="#000000">pause</text>
+            </g>
+          </svg>
         </button><br>
-        <button class="intro" @click="intro"> <img :src="iconAssets.intro" class="intro_img" /> </button>
+        <button class="intro" @click="intro">
+          <div><img :src="iconAssets.intro" class="intro_img" /></div>
+          <div><text class="intro_text" style="font-family='Caveat'">intro</text></div>
+        </button>
       </div>
     </div>
     <div class="playlist">
-      <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)" class="icon">
+      <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)"
+        class="icon">
         <img :src="song.image" />
       </button>
       <br>
@@ -54,8 +78,6 @@ export default {
       playColors: false,
       isPlaying: false,
       iconAssets: {
-        "play": require('./assets/icons/play.svg'),
-        "pause": require('./assets/icons/pause.svg'),
         "intro": require('./assets/icons/intro.svg'),
         "animal": require('./assets/options/animal.png'),
         "attribute": require('./assets/options/attribute.png'),
@@ -127,65 +149,132 @@ export default {
           image: require('./assets/colors/yellow.png'),
         },
       ],
-      player: new Audio()
+      player: new Audio(),
+      intro_player: new Audio(),
     }
   },
   methods: {
-    getImagePath(type, name) {
-      return './assets/' + type + '/' + name + '.png'
-    },
     getRandom(array) {
       return array[Math.floor(Math.random() * array.length)];
     },
     playSong(song) {
       if (song != undefined && song.sound != undefined) {
-        this.current = song;
-        this.player.src = this.current.sound;
+        this.current = { "song": song, "timeout": 0 };
       } else {
         this.current = this.toBePlayed.shift();
-        this.player.src = this.current.sound;
       }
-      console.log(this.current.title);
+      this.player.src = this.current.song.sound;
+      console.log(this.current.song.title);
       this.player.play();
       this.isPlaying = true;
     },
+    shuffle(originalArray) {
+      var array = [].concat(originalArray);
+      let currentIndex = array.length, randomIndex;
+
+      // While there remain elements to shuffle.
+      while (currentIndex != 0) {
+
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex], array[currentIndex]];
+      }
+
+      return array;
+    },
+    getRandomIshAnimal() {
+      if (this.animalsRandomIsh === undefined || this.animalsRandomIsh.length === 0) {
+        this.animalsRandomIsh = this.shuffle(this.animalAssets);
+      }
+      return this.animalsRandomIsh.shift();
+    },
+    getRandomIshAttribute() {
+      if (this.attributesRandomIsh === undefined || this.attributesRandomIsh.length === 0) {
+        this.attributesRandomIsh = this.shuffle(this.attributeAssets);
+      }
+      return this.attributesRandomIsh.shift();
+    },
+    getRandomIshColor() {
+      if (this.colorsRandomIsh === undefined || this.colorsRandomIsh.length === 0) {
+        this.colorsRandomIsh = this.shuffle(this.colorAssets);
+      }
+      return this.colorsRandomIsh.shift();
+    },
     play() {
-      if (this.toBePlayed.length === 0) {
-        if (document.querySelector('#animal').checked) {
-          this.toBePlayed.push(this.getRandom(this.animalAssets));
-        }
-        if (document.querySelector('#attribute').checked) {
-          this.toBePlayed.push(this.getRandom(this.attributeAssets));
-        }
-        if (document.querySelector('#color').checked) {
-          this.toBePlayed.push(this.getRandom(this.colorAssets));
+      var toBePlayed = [];
+      var doAnimal = document.querySelector('#animal').checked;
+      var doAttribute = document.querySelector('#attribute').checked;
+      var doColor = document.querySelector('#color').checked;
+      var timeout = 0;
+      for (let i = 0; i < 100; i++) {
+        if (this.toBePlayed.length === 0) {
+          if (doAnimal) {
+            timeout = doAttribute || doColor ? 0 : 2000;
+            toBePlayed.push({ "song": this.getRandomIshAnimal(), "timeout": timeout });
+          }
+          if (doAttribute) {
+            timeout = doColor ? 0 : 2000;
+            toBePlayed.push({ "song": this.getRandomIshAttribute(), "timeout": timeout });
+          }
+          if (doColor) {
+            toBePlayed.push({ "song": this.getRandomIshColor(), "timeout": 2000 });
+          }
         }
       }
+      this.toBePlayed = toBePlayed;
       this.playSong();
     },
     pause() {
       this.player.pause();
+      this.toBePlayed = [];
       this.isPlaying = false;
     },
     intro() {
-      this.toBePlayed = [...this.animalAssets, ...this.attributeAssets, ...this.colorAssets];
+      var toBePlayed = [];
+      this.animalAssets.forEach(function (item) {
+        toBePlayed.push({ "song": item, "timeout": 0 });
+      })
+      this.attributeAssets.forEach(function (item) {
+        toBePlayed.push({ "song": item, "timeout": 0 });
+      })
+      this.colorAssets.forEach(function (item) {
+        toBePlayed.push({ "song": item, "timeout": 0 });
+      })
+      this.toBePlayed = toBePlayed;
       this.playSong();
     }
   },
   created() {
-
     this.player.addEventListener('ended', function () {
       this.isPlaying = false;
       console.log(this.toBePlayed.length);
       if (this.toBePlayed.length > 0) {
-        setTimeout(function () { this.playSong() }.bind(this), 10);  // 2000
+        console.log("timeout: " + this.current.timeout);
+        setTimeout(function () { this.playSong() }.bind(this), this.current.timeout);  // 2000
       }
     }.bind(this));
+    this.player.removeEventListener
   },
 }
 </script>
 
 <style>
+@font-face {
+  font-family: "Caveat";
+  src: local("Caveat"),
+    url(./fonts/caveat.regular.ttf) format("truetype");
+}
+
+.intro_text {
+  font-family: 'Caveat';
+  font-size: 24px;
+  line-height: 15px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -246,6 +335,7 @@ input {
 .play_img {
   margin: 25px 0 0 0;
   width: 160px;
+  height: 160px;
   background: #16c60c;
   border-radius: 5%;
 }
@@ -264,6 +354,9 @@ input {
   border: 0;
   background: #0078d7;
   border-radius: 5%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .options {

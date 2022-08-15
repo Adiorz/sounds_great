@@ -4,25 +4,25 @@
       <div class="options">
         <div class="option">
           <input type="checkbox" id="animal" name="animal" checked>
-          <label for="animal" class="icon"><img src="./assets/options/animal.png" /></label>
+          <label for="animal" class="icon"><img :src="iconAssets.animal" /></label>
         </div>
         <br>
         <div class="option">
           <input type="checkbox" id="attribute" name="attribute">
-          <label for="attribute" class="icon"><img src="./assets/options/attribute.png" /></label>
+          <label for="attribute" class="icon"><img :src="iconAssets.attribute" /></label>
         </div>
         <br>
         <div class="option">
           <input type="checkbox" id="color" name="color">
-          <label for="color" class="icon"><img src="./assets/options/color.png" /></label>
+          <label for="color" class="icon"><img :src="iconAssets.color" /></label>
         </div>
       </div>
       <div class="control">
-        <button class="play" v-if="!isPlaying" @click="play"> <img src="./assets/icons/play.svg" class="play_img" />
+        <button class="play" v-if="!isPlaying" @click="play"> <img :src="iconAssets.play" class="play_img" />
         </button>
-        <button class="pause" v-else @click="pause"> <img src="./assets/icons/pause.svg" class="pause_img" />
+        <button class="pause" v-else @click="pause"> <img :src="iconAssets.pause" class="pause_img" />
         </button><br>
-        <button class="intro" @click="intro"> <img src="./assets/icons/intro.svg" class="intro_img" /> </button>
+        <button class="intro" @click="intro"> <img :src="iconAssets.intro" class="intro_img" /> </button>
       </div>
     </div>
     <div class="playlist">
@@ -53,6 +53,14 @@ export default {
       playAttributes: false,
       playColors: false,
       isPlaying: false,
+      iconAssets: {
+        "play": require('./assets/icons/play.svg'),
+        "pause": require('./assets/icons/pause.svg'),
+        "intro": require('./assets/icons/intro.svg'),
+        "animal": require('./assets/options/animal.png'),
+        "attribute": require('./assets/options/attribute.png'),
+        "color": require('./assets/options/color.png'),
+      },
       animalAssets: [
         {
           title: 'cat',

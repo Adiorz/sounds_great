@@ -21,7 +21,7 @@
         <button class="play" v-if="!isPlaying" @click="play">
           <svg class="play_img" width="160" height="160" xmlns="http://www.w3.org/2000/svg" fill="white">
             <g>
-              <title>Layer 1</title>
+              <title>play</title>
               <path stroke="null" id="svg_1"
                 d="m43.17908,40.60063l0,78.79874c0,6.00878 7.01719,9.65969 12.42123,6.38909l65.65506,-39.39937c5.00075,-2.96636 5.00075,-9.81181 0,-12.85423l-65.65506,-39.32331c-5.40404,-3.2706 -12.42123,0.3803 -12.42123,6.38909z" />
               <text transform="matrix(7.90178 0 0 5.50952 -620.323 -624.598)" stroke="#000" xml:space="preserve"
@@ -33,6 +33,7 @@
         <button class="pause" v-else @click="pause">
           <svg class="pause_img" width="160" height="160" xmlns="http://www.w3.org/2000/svg" fill="white">
             <g>
+              <title>pause</title>
               <path stroke="null"
                 d="m50.11833,124.30675c8.21746,0 14.94083,-5.69658 14.94083,-12.65907l0,-63.29535c0,-6.96249 -6.72338,-12.65907 -14.94083,-12.65907s-14.94083,5.69658 -14.94083,12.65907l0,63.29535c0,6.96249 6.72338,12.65907 14.94083,12.65907zm44.82251,-75.95443l0,63.29535c0,6.96249 6.72338,12.65907 14.94083,12.65907s14.94083,-5.69658 14.94083,-12.65907l0,-63.29535c0,-6.96249 -6.72338,-12.65907 -14.94083,-12.65907s-14.94083,5.69658 -14.94083,12.65907z"
                 id="svg_1" />
@@ -43,7 +44,7 @@
           </svg>
         </button><br>
         <button class="intro" @click="intro">
-          <div><img :src="iconAssets.intro" class="intro_img" /></div>
+          <div><img :src="iconAssets.intro" class="intro_img" title="intro" /></div>
           <div><text class="intro_text" style="font-family='Caveat'">intro</text></div>
         </button>
       </div>
@@ -73,10 +74,8 @@ export default {
     return {
       current: {},
       toBePlayed: [],
-      playAnimals: true,
-      playAttributes: false,
-      playColors: false,
       isPlaying: false,
+      timeout: 2000,
       iconAssets: {
         "intro": require('./assets/icons/intro.svg'),
         "animal": require('./assets/options/animal.png'),
@@ -159,16 +158,21 @@ export default {
     },
     playSong(song) {
       if (song != undefined && song.sound != undefined) {
-        this.current = { "song": song, "timeout": 0 };
+        this.current = song;
       } else {
         this.current = this.toBePlayed.shift();
       }
-      this.player.src = this.current.song.sound;
-      console.log(this.current.song.title);
+      if (this.current === undefined) {
+        console.log("No song to be played.")
+        return null;
+      }
+      console.log(this.current.title);
+      this.player.src = this.current.sound;
       this.player.play();
       this.isPlaying = true;
     },
     shuffle(originalArray) {
+      // Do not modify original array, work on its copy
       var array = [].concat(originalArray);
       let currentIndex = array.length, randomIndex;
 
@@ -186,75 +190,56 @@ export default {
 
       return array;
     },
-    getRandomIshAnimal() {
-      if (this.animalsRandomIsh === undefined || this.animalsRandomIsh.length === 0) {
-        this.animalsRandomIsh = this.shuffle(this.animalAssets);
-      }
-      return this.animalsRandomIsh.shift();
-    },
-    getRandomIshAttribute() {
-      if (this.attributesRandomIsh === undefined || this.attributesRandomIsh.length === 0) {
-        this.attributesRandomIsh = this.shuffle(this.attributeAssets);
-      }
-      return this.attributesRandomIsh.shift();
-    },
-    getRandomIshColor() {
-      if (this.colorsRandomIsh === undefined || this.colorsRandomIsh.length === 0) {
-        this.colorsRandomIsh = this.shuffle(this.colorAssets);
-      }
-      return this.colorsRandomIsh.shift();
-    },
     play() {
+      console.log("Play!");
+      this.timeout = 2000;
       var toBePlayed = [];
-      var doAnimal = document.querySelector('#animal').checked;
-      var doAttribute = document.querySelector('#attribute').checked;
-      var doColor = document.querySelector('#color').checked;
-      var timeout = 0;
-      for (let i = 0; i < 100; i++) {
-        if (this.toBePlayed.length === 0) {
-          if (doAnimal) {
-            timeout = doAttribute || doColor ? 0 : 2000;
-            toBePlayed.push({ "song": this.getRandomIshAnimal(), "timeout": timeout });
+      var playAnimals = document.querySelector('#animal').checked;
+      var playAttributes = document.querySelector('#attribute').checked;
+      var playColors = document.querySelector('#color').checked;
+      if (this.toBePlayed.length === 0) { // do not add new songs for multiple play buttons
+        for (let i = 0; i < 100; i++) {
+          // Use chunk of toBePlayed that contains all possible items selected. 
+          // This ensures that across 4/8/12 played songs, each of possible songs will be played once.
+          var chunk = []; 
+          if (playAnimals) {
+            chunk.push(...this.animalAssets);
           }
-          if (doAttribute) {
-            timeout = doColor ? 0 : 2000;
-            toBePlayed.push({ "song": this.getRandomIshAttribute(), "timeout": timeout });
+          if (playAttributes) {
+            chunk.push(...this.attributeAssets);
           }
-          if (doColor) {
-            toBePlayed.push({ "song": this.getRandomIshColor(), "timeout": 2000 });
+          if (playColors) {
+            chunk.push(...this.colorAssets);
           }
+          toBePlayed.push(...this.shuffle(chunk));
         }
+
       }
       this.toBePlayed = toBePlayed;
       this.playSong();
     },
     pause() {
+      console.log("Pause!");
       this.player.pause();
       this.toBePlayed = [];
       this.isPlaying = false;
     },
     intro() {
-      var toBePlayed = [];
-      this.animalAssets.forEach(function (item) {
-        toBePlayed.push({ "song": item, "timeout": 0 });
-      })
-      this.attributeAssets.forEach(function (item) {
-        toBePlayed.push({ "song": item, "timeout": 0 });
-      })
-      this.colorAssets.forEach(function (item) {
-        toBePlayed.push({ "song": item, "timeout": 0 });
-      })
-      this.toBePlayed = toBePlayed;
+      console.log("Intro!");
+      this.timeout = 20;
+      this.toBePlayed = [...this.animalAssets, ...this.attributeAssets, ...this.colorAssets];
       this.playSong();
     }
   },
   created() {
     this.player.addEventListener('ended', function () {
-      this.isPlaying = false;
-      console.log(this.toBePlayed.length);
+      // switch to play button only if pause was clicked or there are no more songs in the toBePlayed list
+      if (this.toBePlayed.length === 0) {
+        this.isPlaying = false;
+      }
+      console.log("Left toBePlayed: " + this.toBePlayed.length + ", timeout: " + this.timeout);
       if (this.toBePlayed.length > 0) {
-        console.log("timeout: " + this.current.timeout);
-        setTimeout(function () { this.playSong() }.bind(this), this.current.timeout);  // 2000
+        setTimeout(function () { this.playSong() }.bind(this), this.timeout);  // 20 for intro, 2000 for play
       }
     }.bind(this));
     this.player.removeEventListener

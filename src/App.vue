@@ -4,17 +4,17 @@
       <div class="options">
         <div class="option">
           <input type="checkbox" id="animal" name="animal" checked>
-          <label for="animal" class="icon"><img :src="iconAssets.animal" /></label>
+          <label for="animal" class="icon"><img :src="iconAssets.animal" class="icon_img" /></label>
         </div>
         <br>
         <div class="option">
           <input type="checkbox" id="attribute" name="attribute">
-          <label for="attribute" class="icon"><img :src="iconAssets.attribute" /></label>
+          <label for="attribute" class="icon"><img :src="iconAssets.attribute" class="icon_img" /></label>
         </div>
         <br>
         <div class="option">
           <input type="checkbox" id="color" name="color">
-          <label for="color" class="icon"><img :src="iconAssets.color" /></label>
+          <label for="color" class="icon"><img :src="iconAssets.color" class="icon_img" /></label>
         </div>
       </div>
       <div class="control">
@@ -50,17 +50,16 @@
       </div>
     </div>
     <div class="playlist">
-      <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)"
-        class="icon">
-        <img :src="song.image" />
+      <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)" class="icon">
+        <img :src="song.image" class="icon_img" />
       </button>
       <br>
       <button v-for="song in attributeAssets" :key="song.sound" @click="playSong(song)" class="icon">
-        <img :src="song.image" />
+        <img :src="song.image" class="icon_img" />
       </button>
       <br>
       <button v-for="song in colorAssets" :key="song.sound" @click="playSong(song)" class="icon">
-        <img :src="song.image" />
+        <img :src="song.image" class="icon_img" />
       </button>
     </div>
   </div>
@@ -78,74 +77,74 @@ export default {
       timeout: 2000,
       iconAssets: {
         "intro": require('./assets/icons/intro.svg'),
-        "animal": require('./assets/options/animal.png'),
-        "attribute": require('./assets/options/attribute.png'),
-        "color": require('./assets/options/color.png'),
+        "animal": require('./assets/options/animal.svg'),
+        "attribute": require('./assets/options/attribute.svg'),
+        "color": require('./assets/options/color.svg'),
       },
       animalAssets: [
         {
           title: 'cat',
           sound: require('./assets/animals/cat.mp3'),
-          image: require('./assets/animals/cat.png'),
+          image: require('./assets/animals/cat.svg'),
         },
         {
           title: 'cow',
           sound: require('./assets/animals/cow.mp3'),
-          image: require('./assets/animals/cow.png'),
+          image: require('./assets/animals/cow.svg'),
         },
         {
           title: 'elephant',
           sound: require('./assets/animals/elephant.mp3'),
-          image: require('./assets/animals/elephant.png'),
+          image: require('./assets/animals/elephant.svg'),
         },
         {
           title: 'snake',
           sound: require('./assets/animals/snake.mp3'),
-          image: require('./assets/animals/snake.png'),
+          image: require('./assets/animals/snake.svg'),
         },
       ],
       attributeAssets: [
         {
           title: 'boots',
           sound: require('./assets/attributes/boots.mp3'),
-          image: require('./assets/attributes/boots.png'),
+          image: require('./assets/attributes/boots.svg'),
         },
         {
           title: 'glasses',
           sound: require('./assets/attributes/glasses.mp3'),
-          image: require('./assets/attributes/glasses.png'),
+          image: require('./assets/attributes/glasses.svg'),
         },
         {
           title: 'hat',
           sound: require('./assets/attributes/hat.mp3'),
-          image: require('./assets/attributes/hat.png'),
+          image: require('./assets/attributes/hat.svg'),
         },
         {
           title: 'umbrella',
           sound: require('./assets/attributes/umbrella.mp3'),
-          image: require('./assets/attributes/umbrella.png'),
+          image: require('./assets/attributes/umbrella.svg'),
         },
       ],
       colorAssets: [
         {
           title: 'blue',
           sound: require('./assets/colors/blue.mp3'),
-          image: require('./assets/colors/blue.png'),
+          image: require('./assets/colors/blue.svg'),
         },
         {
           title: 'green',
           sound: require('./assets/colors/green.mp3'),
-          image: require('./assets/colors/green.png'),
+          image: require('./assets/colors/green.svg'),
         },
         {
           title: 'red',
           sound: require('./assets/colors/red.mp3'),
-          image: require('./assets/colors/red.png'),
+          image: require('./assets/colors/red.svg'),
         },
         {
           title: 'yellow',
           sound: require('./assets/colors/yellow.mp3'),
-          image: require('./assets/colors/yellow.png'),
+          image: require('./assets/colors/yellow.svg'),
         },
       ],
       player: new Audio(),
@@ -201,7 +200,7 @@ export default {
         for (let i = 0; i < 100; i++) {
           // Use chunk of toBePlayed that contains all possible items selected. 
           // This ensures that across 4/8/12 played songs, each of possible songs will be played once.
-          var chunk = []; 
+          var chunk = [];
           if (playAnimals) {
             chunk.push(...this.animalAssets);
           }
@@ -239,7 +238,8 @@ export default {
       }
       console.log("Left toBePlayed: " + this.toBePlayed.length + ", timeout: " + this.timeout);
       if (this.toBePlayed.length > 0) {
-        setTimeout(function () { this.playSong() }.bind(this), this.timeout);  // 20 for intro, 2000 for play
+        // 20 for intro, 2000 for play
+        setTimeout(function () { this.playSong() }.bind(this), this.timeout);
       }
     }.bind(this));
     this.player.removeEventListener
@@ -276,6 +276,11 @@ export default {
 
 body {
   font-family: sans-serif;
+}
+
+.icon_img {
+  max-width: 50px;
+  max-height: 50px;
 }
 
 .icon {
@@ -329,6 +334,7 @@ input {
 .pause_img {
   margin: 25px 0 0 0;
   width: 160px;
+  height: 160px;
   background: #e81224;
   border-radius: 5%;
 }

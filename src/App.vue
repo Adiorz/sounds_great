@@ -19,32 +19,33 @@
       </div>
       <div class="control">
         <button class="play" v-if="!isPlaying" @click="play">
-          <svg class="play_img" width="160" height="160" xmlns="http://www.w3.org/2000/svg" fill="white">
+          <svg class="play_img" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg" version="1.1"
+            xml:space="preserve">
             <g>
-              <title>play</title>
-              <path stroke="null" id="svg_1"
-                d="m43.17908,40.60063l0,78.79874c0,6.00878 7.01719,9.65969 12.42123,6.38909l65.65506,-39.39937c5.00075,-2.96636 5.00075,-9.81181 0,-12.85423l-65.65506,-39.32331c-5.40404,-3.2706 -12.42123,0.3803 -12.42123,6.38909z" />
+              <path
+                d="m280,25c0,-13.807 -11.193,-25 -25,-25l-230,0c-13.807,0 -25,11.193 -25,25l0,230c0,13.807 11.193,25 25,25l230,0c13.807,0 25,-11.193 25,-25l0,-230zm-91.153,127.047l-79.192,51.693c-10.123,6.629 -18.655,2.152 -18.655,-9.948l0,-107.584c0,-12.1 8.532,-16.577 18.656,-9.949l79.066,51.685c10.123,6.628 10.248,17.474 0.125,24.103z"
+                fill="#7fb762" data-original="#000000" id="svg_2" xmlns="http://www.w3.org/2000/svg" />
               <text transform="matrix(7.90178 0 0 5.50952 -620.323 -624.598)" stroke="#000" xml:space="preserve"
-                text-anchor="start" font-family="'Caveat'" font-size="5" id="svg_2" y="140.07375" x="90.14896"
+                text-anchor="start" font-family="'Caveat'" font-size="8" id="svg_2" y="159.07375" x="99.14896"
                 stroke-width="0" fill="white">play</text>
             </g>
           </svg>
         </button>
         <button class="pause" v-else @click="pause">
-          <svg class="pause_img" width="160" height="160" xmlns="http://www.w3.org/2000/svg" fill="white">
+          <svg class="pause_img" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+            version="1.1">
             <g>
-              <title>pause</title>
-              <path stroke="null"
-                d="m50.11833,124.30675c8.21746,0 14.94083,-5.69658 14.94083,-12.65907l0,-63.29535c0,-6.96249 -6.72338,-12.65907 -14.94083,-12.65907s-14.94083,5.69658 -14.94083,12.65907l0,63.29535c0,6.96249 6.72338,12.65907 14.94083,12.65907zm44.82251,-75.95443l0,63.29535c0,6.96249 6.72338,12.65907 14.94083,12.65907s14.94083,-5.69658 14.94083,-12.65907l0,-63.29535c0,-6.96249 -6.72338,-12.65907 -14.94083,-12.65907s-14.94083,5.69658 -14.94083,12.65907z"
-                id="svg_1" />
+              <path id="svg_2" data-original="#000000" fill="#ea394e"
+                d="m280,25c0,-13.807 -11.193,-25 -25,-25l-230,0c-13.807,0 -25,11.193 -25,25l0,230c0,13.807 11.193,25 25,25l230,0c13.807,0 25,-11.193 25,-25l0,-230zm-159,168.439c0,10.217 -8.282,18.5 -18.5,18.5c-10.218,0 -18.5,-8.283 -18.5,-18.5l0,-106.878c0,-10.217 8.282,-18.5 18.5,-18.5c10.218,0 18.5,8.283 18.5,18.5l0,106.878zm75,0c0,10.217 -8.282,18.5 -18.5,18.5c-10.218,0 -18.5,-8.283 -18.5,-18.5l0,-106.878c0,-10.217 8.282,-18.5 18.5,-18.5c10.218,0 18.5,8.283 18.5,18.5l0,106.878z"
+                xmlns="http://www.w3.org/2000/svg" />
               <text transform="matrix(7.90178 0 0 5.50952 -620.323 -624.598)" stroke="#000" xml:space="preserve"
-                text-anchor="start" font-family="'Caveat'" font-size="5" id="svg_2" y="140.07375" x="88.14896"
+                text-anchor="start" font-family="'Caveat'" font-size="8" id="svg_2" y="159.07375" x="97.14896"
                 stroke-width="0" fill="white">pause</text>
             </g>
           </svg>
         </button><br>
         <button class="intro" @click="intro">
-          <div><img :src="iconAssets.intro" class="intro_img" title="intro" /></div>
+          <div><img :src="iconAssets.intro" class="intro_img" /></div>
           <div><text class="intro_text" style="font-family='Caveat'">intro</text></div>
         </button>
       </div>
@@ -100,7 +101,7 @@ export default {
         {
           title: 'snake',
           sound: require('./assets/animals/snake.mp3'),
-          image: require('./assets/animals/snake.svg'),
+          image: require('./assets/animals/snake2.svg'),
         },
       ],
       attributeAssets: [
@@ -148,7 +149,6 @@ export default {
         },
       ],
       player: new Audio(),
-      intro_player: new Audio(),
     }
   },
   methods: {
@@ -254,6 +254,10 @@ export default {
     url(./fonts/caveat.regular.ttf) format("truetype");
 }
 
+input {
+  accent-color: #4b98d4;
+}
+
 .intro_text {
   font-family: 'Caveat';
   font-size: 24px;
@@ -327,16 +331,12 @@ input {
   margin: 25px 0 0 0;
   width: 160px;
   height: 160px;
-  background: #16c60c;
-  border-radius: 5%;
 }
 
 .pause_img {
   margin: 25px 0 0 0;
   width: 160px;
   height: 160px;
-  background: #e81224;
-  border-radius: 5%;
 }
 
 .intro {
@@ -344,7 +344,7 @@ input {
   width: 160px;
   height: 40px;
   border: 0;
-  background: #0078d7;
+  background: #4b98d4;
   border-radius: 5%;
   display: inline-flex;
   align-items: center;

@@ -51,17 +51,25 @@
       </div>
     </div>
     <div class="playlist">
-      <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)" class="icon">
-        <img :src="song.image" class="icon_img" />
-      </button>
-      <br>
-      <button v-for="song in attributeAssets" :key="song.sound" @click="playSong(song)" class="icon">
-        <img :src="song.image" class="icon_img" />
-      </button>
-      <br>
-      <button v-for="song in colorAssets" :key="song.sound" @click="playSong(song)" class="icon">
-        <img :src="song.image" class="icon_img" />
-      </button>
+      <!-- TODO: base on playing sound, modicy border color of icon/image -->
+      <div class='demo_buttons'>
+        <button v-for="song in animalAssets" :key="song.sound" @click="playSong(song)"
+          :class="[song.title + '_icon', 'icon']">
+          <img :src="song.image" class="icon_img" />
+        </button>
+      </div>
+      <div class='demo_buttons'>
+        <button v-for="song in attributeAssets" :key="song.sound" @click="playSong(song)"
+          :class="[song.title + '_icon', 'icon']">
+          <img :src="song.image" class="icon_img" />
+        </button>
+      </div>
+      <div class='demo_buttons'>
+        <button v-for="song in colorAssets" :key="song.sound" @click="playSong(song)"
+          :class="[song.title + '_icon', 'icon']">
+          <img :src="song.image" class="icon_img" />
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -76,6 +84,7 @@ export default {
       toBePlayed: [],
       isPlaying: false,
       timeout: 2000,
+      colorsSelected: false,  // this should hold the value
       iconAssets: {
         "intro": require('./assets/icons/intro.svg'),
         "animal": require('./assets/options/animal.svg'),
@@ -152,6 +161,9 @@ export default {
     }
   },
   methods: {
+    colorsChangeSelected() {
+      this.colorsSelected = !this.colorsSelected;
+    },
     getRandom(array) {
       return array[Math.floor(Math.random() * array.length)];
     },
@@ -189,28 +201,37 @@ export default {
 
       return array;
     },
+    shouldPlayAnimals() {
+      return document.querySelector('#animal').checked;
+    },
+    shouldPlayAttributes() {
+      return document.querySelector('#attribute').checked;
+    },
+    shouldPlayColors() {
+      return document.querySelector('#color').checked;
+    },
+    getToBePlayedChunk() {
+      // Get chunk of toBePlayed that contains all possible items selected. 
+      var chunk = [];
+      if (this.shouldPlayAnimals()) {
+        chunk.push(...this.animalAssets);
+      }
+      if (this.shouldPlayAttributes()) {
+        chunk.push(...this.attributeAssets);
+      }
+      if (this.shouldPlayColors()) {
+        chunk.push(...this.colorAssets);
+      }
+      return chunk;
+    },
     play() {
       console.log("Play!");
       this.timeout = 2000;
       var toBePlayed = [];
-      var playAnimals = document.querySelector('#animal').checked;
-      var playAttributes = document.querySelector('#attribute').checked;
-      var playColors = document.querySelector('#color').checked;
       if (this.toBePlayed.length === 0) { // do not add new songs for multiple play buttons
         for (let i = 0; i < 100; i++) {
-          // Use chunk of toBePlayed that contains all possible items selected. 
-          // This ensures that across 4/8/12 played songs, each of possible songs will be played once.
-          var chunk = [];
-          if (playAnimals) {
-            chunk.push(...this.animalAssets);
-          }
-          if (playAttributes) {
-            chunk.push(...this.attributeAssets);
-          }
-          if (playColors) {
-            chunk.push(...this.colorAssets);
-          }
-          toBePlayed.push(...this.shuffle(chunk));
+          // Using toBePlayedChunks ensures that across 4/8/12 played songs, each of possible songs will be played once.
+          toBePlayed.push(...this.shuffle(this.getToBePlayedChunk()));
         }
 
       }
@@ -225,8 +246,8 @@ export default {
     },
     intro() {
       console.log("Intro!");
-      this.timeout = 20;
-      this.toBePlayed = [...this.animalAssets, ...this.attributeAssets, ...this.colorAssets];
+      this.timeout = 1000;
+      this.toBePlayed = this.getToBePlayedChunk();
       this.playSong();
     }
   },
@@ -355,4 +376,11 @@ input {
   padding: 10px;
   margin-top: 30px;
 }
+
+.demo_buttons {
+  border-color: transparent;
+  border-width: 1px;
+  border-style: dotted;
+}
+
 </style>

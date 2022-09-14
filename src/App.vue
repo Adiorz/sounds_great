@@ -8,8 +8,8 @@
         </div>
         <br>
         <div class="option">
-          <input type="checkbox" id="attribute" name="attribute">
-          <label for="attribute" class="icon"><img :src="iconAssets.attribute" class="icon_img" /></label>
+          <input type="checkbox" id="instrument" name="instrument">
+          <label for="instrument" class="icon"><img :src="iconAssets.instrument" class="icon_img" /></label>
         </div>
         <br>
         <div class="option">
@@ -59,7 +59,7 @@
         </button>
       </div>
       <div class='demo_buttons'>
-        <button v-for="song in attributeAssets" :key="song.sound" @click="playSong(song)"
+        <button v-for="song in instrumentAssets" :key="song.sound" @click="playSong(song)"
           :class="[song.title + '_icon', 'icon']">
           <img :src="song.image" class="icon_img" />
         </button>
@@ -88,7 +88,7 @@ export default {
       iconAssets: {
         "intro": require('./assets/icons/intro.svg'),
         "animal": require('./assets/options/animal.svg'),
-        "attribute": require('./assets/options/attribute.svg'),
+        "instrument": require('./assets/options/instrument.svg'),
         "color": require('./assets/options/color.svg'),
       },
       animalAssets: [
@@ -104,35 +104,35 @@ export default {
         },
         {
           title: 'elephant',
-          sound: require('./assets/animals/elephant.mp3'),
-          image: require('./assets/animals/elephant.svg'),
+          sound: require('./assets/animals/dog.mp3'),
+          image: require('./assets/animals/dog.svg'),
         },
         {
           title: 'snake',
-          sound: require('./assets/animals/snake.mp3'),
-          image: require('./assets/animals/snake2.svg'),
+          sound: require('./assets/animals/duck.mp3'),
+          image: require('./assets/animals/duck.svg'),
         },
       ],
-      attributeAssets: [
+      instrumentAssets: [
         {
-          title: 'boots',
-          sound: require('./assets/attributes/boots.mp3'),
-          image: require('./assets/attributes/boots.svg'),
+          title: 'drum',
+          sound: require('./assets/instruments/drum.mp3'),
+          image: require('./assets/instruments/drum.svg'),
         },
         {
-          title: 'glasses',
-          sound: require('./assets/attributes/glasses.mp3'),
-          image: require('./assets/attributes/glasses.svg'),
+          title: 'guitar',
+          sound: require('./assets/instruments/guitar.mp3'),
+          image: require('./assets/instruments/guitar.svg'),
         },
         {
-          title: 'hat',
-          sound: require('./assets/attributes/hat.mp3'),
-          image: require('./assets/attributes/hat.svg'),
+          title: 'piano',
+          sound: require('./assets/instruments/piano.mp3'),
+          image: require('./assets/instruments/piano.svg'),
         },
         {
-          title: 'umbrella',
-          sound: require('./assets/attributes/umbrella.mp3'),
-          image: require('./assets/attributes/umbrella.svg'),
+          title: 'saxophone',
+          sound: require('./assets/instruments/saxophone.mp3'),
+          image: require('./assets/instruments/saxophone.svg'),
         },
       ],
       colorAssets: [
@@ -204,20 +204,20 @@ export default {
     shouldPlayAnimals() {
       return document.querySelector('#animal').checked;
     },
-    shouldPlayAttributes() {
-      return document.querySelector('#attribute').checked;
+    shouldPlayinstruments() {
+      return document.querySelector('#instrument').checked;
     },
     shouldPlayColors() {
       return document.querySelector('#color').checked;
     },
     getToBePlayedChunk() {
-      // Get chunk of toBePlayed that contains all possible items selected. 
+      // Get chunk of toBePlayed tpiano contains all possible items selected. 
       var chunk = [];
       if (this.shouldPlayAnimals()) {
         chunk.push(...this.animalAssets);
       }
-      if (this.shouldPlayAttributes()) {
-        chunk.push(...this.attributeAssets);
+      if (this.shouldPlayinstruments()) {
+        chunk.push(...this.instrumentAssets);
       }
       if (this.shouldPlayColors()) {
         chunk.push(...this.colorAssets);
@@ -230,7 +230,7 @@ export default {
       var toBePlayed = [];
       if (this.toBePlayed.length === 0) { // do not add new songs for multiple play buttons
         for (let i = 0; i < 100; i++) {
-          // Using toBePlayedChunks ensures that across 4/8/12 played songs, each of possible songs will be played once.
+          // Using toBePlayedChunks ensures tpiano across 4/8/12 played songs, each of possible songs will be played once.
           toBePlayed.push(...this.shuffle(this.getToBePlayedChunk()));
         }
 
